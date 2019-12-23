@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8e1f79e-2175-48f8-b8bd-13de188e84e1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/mission/controller/ProjectController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mission/domain/ProjectRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mission/dto/ProjectDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mission/service/ProjectService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mission/service/ProjectService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mission/TumblbugApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mission/controller/ProjectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mission/controller/ProjectController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mission/domain/ProjectRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mission/domain/ProjectRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,29 +124,29 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="195" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1536.824@0.0.1536.824" timestamp="1577089502662" />
-    <state width="1493" height="278" key="GridCell.Tab.0.bottom" timestamp="1577089553913">
+    <state width="1493" height="143" key="GridCell.Tab.0.bottom" timestamp="1577090387262">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="278" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1577089553913" />
-    <state width="1493" height="278" key="GridCell.Tab.0.center" timestamp="1577089553912">
+    <state width="1493" height="143" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1577090387262" />
+    <state width="1493" height="143" key="GridCell.Tab.0.center" timestamp="1577090387262">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="278" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1577089553912" />
-    <state width="1493" height="278" key="GridCell.Tab.0.left" timestamp="1577089553912">
+    <state width="1493" height="143" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1577090387262" />
+    <state width="1493" height="143" key="GridCell.Tab.0.left" timestamp="1577090387262">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="278" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1577089553912" />
-    <state width="1493" height="278" key="GridCell.Tab.0.right" timestamp="1577089553913">
+    <state width="1493" height="143" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1577090387262" />
+    <state width="1493" height="143" key="GridCell.Tab.0.right" timestamp="1577090387262">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="278" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1577089553913" />
+    <state width="1493" height="143" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1577090387262" />
     <state x="277" y="54" key="SettingsEditor" timestamp="1577089513851">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1577089513851" />
-    <state x="540" y="114" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1577089503701">
+    <state x="540" y="114" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1577090382185">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="540" y="114" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1536.824@0.0.1536.824" timestamp="1577089503701" />
+    <state x="540" y="114" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1536.824@0.0.1536.824" timestamp="1577090382185" />
   </component>
 </project>

@@ -21,10 +21,9 @@ public class ProjectController {
     private static final Logger log = getLogger(ProjectController.class);
 
     @PostMapping("/create")
-    public ResponseEntity<Project> create(@RequestBody ProjectDto projectDto){
-        log.debug("확인용 : {}" , projectDto.toString());
+    public ResponseEntity<Project> create(@RequestBody ProjectDto projectDto) {
+        log.debug("확인용 : {}", projectDto.toString());
 
         return null;
     }
-
 }
