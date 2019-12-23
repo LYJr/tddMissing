@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: ims
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local-db

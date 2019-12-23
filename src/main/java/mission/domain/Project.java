@@ -43,13 +43,13 @@ public class Project {
     //휴대폰 양식????
     private String originatorPhone;
 
-    @Column
-    //24시간 단위
-    private Data startTime;
-
-    @Column
-    //24시간 단위
-    private Data EndTime;
+//    @Column
+//    //24시간 단위
+//    private Data startTime;
+//
+//    @Column
+//    //24시간 단위
+//    private Data EndTime;
 
     @Column
     @Size(max = 100000000)
@@ -60,6 +60,7 @@ public class Project {
     private Long fundingCount;
 
     @Column
+    @Size(max = 100000000)
     private Long fundingAmount;
 
     @Column
