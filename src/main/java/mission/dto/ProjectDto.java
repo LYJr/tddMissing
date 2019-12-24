@@ -1,25 +1,40 @@
 package mission.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import mission.domain.Project;
+import mission.domain.State;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDto {
 
+    //프로젝트 이름
+    @NotNull
+    @Size(max = 50)
     private String title;
 
+    //설명
+    @NotNull
+    @Size(max =  255)
     private String explanation;
 
-    //특수문자 불허. 단 '_'는 허용
+    //창작자 이름
+    @NotNull
+    @Size(max = 20)
     private String originatorName;
 
+    @NotNull
+    @Email
     private String originatorEmail;
 
-    //휴대폰 양식????
+    @NotNull
     private String originatorPhone;
 
 //    @Column
@@ -30,25 +45,40 @@ public class ProjectDto {
 //    //24시간 단위
 //    private Data EndTime;
 
+    //목표액
+    @NotNull
+    @Size(max = 100000000)
     private Long targetAmount;
 
+    //후원수
+    @Size(max = 100000)
     private Long fundingCount;
 
+    //후원액
+    @Size(max = 100000000)
     private Long fundingAmount;
 
-    private String state;
+    //공개 여부
+    private boolean show = true;
 
+    //프로젝트 상태
+    private State state;
 
-    public ProjectDto(String title, String originatorName, Long targetAmount, Long fundingCount, Long fundingAmount, String state) {
+    private void timeCheck() {
+
+    }
+
+    public ProjectDto(@NotNull @Size(max = 50) String title, @NotNull @Size(max = 255) String explanation, @NotNull @Size(max = 20) String originatorName, @NotNull @Email String originatorEmail, @NotNull String originatorPhone, @NotNull @Size(max = 100000000) Long targetAmount) {
         this.title = title;
+        this.explanation = explanation;
         this.originatorName = originatorName;
+        this.originatorEmail = originatorEmail;
+        this.originatorPhone = originatorPhone;
         this.targetAmount = targetAmount;
-        this.fundingCount = fundingCount;
-        this.fundingAmount = fundingAmount;
-        this.state = state;
     }
 
     public Project to_project () {
-        return new Project();
+        return new Project(title, explanation, originatorName, originatorEmail, originatorPhone,
+                targetAmount, fundingCount, fundingAmount, show, State.PREPARING);
     }
 }

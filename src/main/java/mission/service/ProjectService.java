@@ -19,14 +19,11 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Optional<Project> findById(Long id) {
+    public Optional<Project> findById(long id) {
         return projectRepository.findById(id);
     }
 
     public Project save (ProjectDto projectDto) {
-        return projectDto.to_project();
+        return projectRepository.save(projectDto.to_project());
     }
-
-
-
 }
