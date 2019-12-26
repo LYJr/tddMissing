@@ -2,5 +2,7 @@ package mission.common;
 
 public enum CommonState {
     SUCCESS,
-    FAILURE;
+    FAILURE,
+    PERMIT,
+    DELECT;
 }

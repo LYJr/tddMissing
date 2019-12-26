@@ -1,15 +1,16 @@
 package mission.controller;
 
+import mission.common.CommonService;
 import mission.common.CommonResponse;
 import mission.common.CommonState;
 import mission.dto.ProjectDto;
 import mission.service.ProjectService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,11 +24,42 @@ public class ProjectController {
     private static final Logger log = getLogger(ProjectController.class);
 
     @PostMapping("create")
-    public CommonResponse create(@RequestBody ProjectDto projectDto) {
+    //익셉션 추가
+    public CommonResponse create(@Valid @RequestBody ProjectDto projectDto) {
         projectService.save(projectDto);
         return CommonResponse.builder()
-                .project(projectDto.to_project())
+                .projectData(projectDto.to_project())
                 .message("ok?")
                 .state(CommonState.SUCCESS).build();
     }
+
+    @GetMapping("update/")
+    public CommonResponse updateData (@PathVariable Long id) {
+        return CommonService.success(projectService.findById(id));
+    }
+
+    @PutMapping("update/{id}")
+    public CommonResponse update(@PathVariable Long id, @Valid @RequestBody ProjectDto projectDto) {
+        projectService.update(id, projectDto);
+        return CommonService.success(projectDto);
+    }
+
+    @DeleteMapping("delect/{id}")
+    public CommonResponse delect(@PathVariable Long id) {
+        projectService.delect(id);
+        return CommonService.delect(id);
+    }
+
+    @GetMapping("show/")
+    public CommonResponse projectShow (@PathVariable Long id) {
+        projectService.findById(id);
+        return CommonService.success(projectService.findById(id));
+    }
+
+    @GetMapping("projectList/")
+    public CommonResponse projectList () {
+        return null;
+    }
+
+
 }

@@ -1,9 +1,12 @@
 package mission.domain;
 
 import lombok.*;
+import mission.common.CommonState;
+import mission.dto.ProjectDto;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
@@ -11,6 +14,7 @@ import javax.validation.constraints.Email;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
@@ -27,19 +31,16 @@ public class Project {
     private String originatorName;
 
     @Column(unique = true)
-    @Email
     private String originatorEmail;
 
     @Column(unique = true)
     private String originatorPhone;
 
-//    @Column
-//    //24시간 단위
-//    private Data startTime;
-//
-//    @Column
-//    //24시간 단위
-//    private Data EndTime;
+    @Column
+    private LocalDateTime startTime;
+
+    @Column
+    private LocalDateTime endTime;
 
     @Column
     private Long targetAmount;
@@ -54,18 +55,27 @@ public class Project {
     private boolean show;
 
     @Column
-    private State state;
+    private ProjectState state;
 
-    public Project(String title, String explanation, String originatorName, @Email String originatorEmail, String originatorPhone, Long targetAmount, Long fundingCount, Long fundingAmount, Boolean show,State state) {
+    @Column
+    private CommonState 허용;
+
+    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, boolean show, ProjectState state, CommonState 허용) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
         this.originatorEmail = originatorEmail;
         this.originatorPhone = originatorPhone;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.targetAmount = targetAmount;
-        this.fundingCount = fundingCount;
-        this.fundingAmount = fundingAmount;
         this.show = show;
         this.state = state;
+        this.허용 = 허용;
+    }
+
+    public long isDelect() {
+        this.허용 = CommonState.DELECT;
+        return id;
     }
 }
