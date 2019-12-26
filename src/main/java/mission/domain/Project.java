@@ -1,71 +1,81 @@
 package mission.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import mission.common.CommonState;
+import mission.dto.ProjectDto;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    //uuid 타입
     private Long id;
 
     @Column
-    @Size(max = 50)
-    //특수문자 불허
     private String title;
 
     @Column
-    @Size(max =  255)
     private String explanation;
 
     @Column
-    @Size(max = 20)
-    //특수문자 불허. 단 '_'는 허용
     private String originatorName;
 
     @Column(unique = true)
-    @Email
     private String originatorEmail;
 
     @Column(unique = true)
-    //휴대폰 양식????
     private String originatorPhone;
 
     @Column
-    //24시간 단위
-    private Data startTime;
+    private LocalDateTime startTime;
 
     @Column
-    //24시간 단위
-    private Data EndTime;
+    private LocalDateTime endTime;
 
     @Column
-    @Size(max = 100000000)
     private Long targetAmount;
 
     @Column
-    @Size(max = 100000)
     private Long fundingCount;
 
     @Column
     private Long fundingAmount;
 
     @Column
-    private boolean show = true;
+    private boolean show;
 
     @Column
-    private String state;
+    private ProjectState state;
 
+    @Column
+    private CommonState 허용;
+
+    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, boolean show, ProjectState state, CommonState 허용) {
+        this.title = title;
+        this.explanation = explanation;
+        this.originatorName = originatorName;
+        this.originatorEmail = originatorEmail;
+        this.originatorPhone = originatorPhone;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.targetAmount = targetAmount;
+        this.show = show;
+        this.state = state;
+        this.허용 = 허용;
+    }
+
+    public long isDelect() {
+        this.허용 = CommonState.DELECT;
+        return id;
+    }
 }
