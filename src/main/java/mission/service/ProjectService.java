@@ -38,23 +38,23 @@ public class ProjectService {
         return project;
     }
 
-    @Transactional
-    public long delect(long id) {
-        Project project = findById(id);
-        project.isDelect();
-        return id;
-    }
-
-    public List<Project> permitProjectList () {
-        List<Project> findAll = findAll();
-
-        List<Project> projects = new ArrayList<>();
-        for (Project project : findAll) {
-            if(project.get허용() == CommonState.PERMIT) {
-                projects.add(project);
-            }
-        }
-        return projects;
-    }
+//    @Transactional
+//    public long delect(long id) {
+//        Project project = findById(id);
+//        project.isDelect();
+//        return id;
+//    }
+//
+//    public List<Project> permitProjectList () {
+//        List<Project> findAll = findAll();
+//
+//        List<Project> projects = new ArrayList<>();
+//        for (Project project : findAll) {
+//            if(project.getIsDelect() == CommonState.PERMIT) {
+//                projects.add(project);
+//            }
+//        }
+//        return projects;
+//    }
 
 }

@@ -34,7 +34,7 @@ public class ProjectServiceTest {
     private LocalDateTime start = LocalDateTime.of(2019, 1,12,0,0,0);
     private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8);
     private ProjectDto projectDto =
-            new ProjectDto("제목", "설명", "이름", "email@a.a", "0000000", start, end, (long)3000);
+            new ProjectDto("제목");
 
     @After
     public void cleanup(){
@@ -54,14 +54,12 @@ public class ProjectServiceTest {
         System.out.println(project);
 
         assertThat(project.getTitle()).isEqualTo(projectDto.getTitle());
-        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
+//        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
     }
 
     @Test
     public void 단일_호출() {
         Project project = projectService.findById(1);
         System.out.println(project);
-
-
     }
 }

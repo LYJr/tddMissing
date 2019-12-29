@@ -7,7 +7,6 @@ import mission.dto.ProjectDto;
 import mission.service.ProjectService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +23,6 @@ public class ProjectController {
     private static final Logger log = getLogger(ProjectController.class);
 
     @PostMapping("create")
-    //익셉션 추가
     public CommonResponse create(@Valid @RequestBody ProjectDto projectDto) {
         projectService.save(projectDto);
         return CommonResponse.builder()
@@ -44,22 +42,22 @@ public class ProjectController {
         return CommonService.success(projectDto);
     }
 
-    @DeleteMapping("delect/{id}")
-    public CommonResponse delect(@PathVariable Long id) {
-        projectService.delect(id);
-        return CommonService.delect(id);
-    }
+//    @DeleteMapping("delect/{id}")
+//    public CommonResponse delect(@PathVariable Long id) {
+//        projectService.delect(id);
+//        return CommonService.delect(id);
+//    }
 
-    @GetMapping("show/")
-    public CommonResponse projectShow (@PathVariable Long id) {
-        projectService.findById(id);
-        return CommonService.success(projectService.findById(id));
-    }
-
-    @GetMapping("projectList/")
-    public CommonResponse projectList () {
-        return null;
-    }
+//    @GetMapping("show/")
+//    public CommonResponse projectShow (@PathVariable Long id) {
+//        projectService.findById(id);
+//        return CommonService.success(projectService.findById(id));
+//    }
+//
+//    @GetMapping("projectList/")
+//    public CommonResponse projectList () {
+//        return null;
+//    }
 
 
 }
