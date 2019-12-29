@@ -3,6 +3,7 @@ package mission.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import mission.common.CommonState;
+import mission.common.DayCheckUtil;
 import mission.common.Regex;
 import mission.domain.Project;
 import mission.domain.ProjectState;
@@ -100,5 +101,9 @@ public class ProjectDto {
     public Project to_project() {
         return new Project(title, explanation, originatorName, originatorEmail, originatorPhone,
                 startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state, isDelect);
+    }
+
+    private ProjectState stateCheck (LocalDateTime startTime, LocalDateTime endTime) {
+        return DayCheckUtil.proceedingCheck(startTime, endTime);
     }
 }
