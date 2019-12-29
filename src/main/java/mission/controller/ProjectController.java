@@ -7,6 +7,7 @@ import mission.dto.ProjectDto;
 import mission.service.ProjectService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,12 +24,13 @@ public class ProjectController {
     private static final Logger log = getLogger(ProjectController.class);
 
     @PostMapping("create")
-    public CommonResponse create(@Valid @RequestBody ProjectDto projectDto) {
+    public CommonResponse create(@RequestBody @Valid ProjectDto projectDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return CommonService.failure(bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
+        }
+
         projectService.save(projectDto);
-        return CommonResponse.builder()
-                .projectData(projectDto.to_project())
-                .message("ok?")
-                .state(CommonState.SUCCESS).build();
+        return CommonService.success(projectDto.toString());
     }
 
     @GetMapping("update/")
@@ -58,6 +60,5 @@ public class ProjectController {
 //    public CommonResponse projectList () {
 //        return null;
 //    }
-
 
 }

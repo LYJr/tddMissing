@@ -34,7 +34,9 @@ public class ProjectServiceTest {
     private LocalDateTime start = LocalDateTime.of(2019, 1,12,0,0,0);
     private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8);
     private ProjectDto projectDto =
-            new ProjectDto("제목");
+            new ProjectDto("Testing", "설명은 특문포함 ㅇㅈㅇ!",
+                    "resian_1", "test@gmail.com", "010514113412", start, end,
+                    (long) 50000);
 
     @After
     public void cleanup(){

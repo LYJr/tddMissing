@@ -1,6 +1,5 @@
 package mission.controller;
 
-import mission.BaseTest;
 import mission.common.CommonResponse;
 import mission.domain.Project;
 import mission.domain.ProjectRepository;
@@ -19,9 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ProjectControllerTest extends BaseTest {
+public class ProjectControllerTest{
 
     @LocalServerPort
     private int port;
@@ -46,24 +42,16 @@ public class ProjectControllerTest extends BaseTest {
 
     private static final Logger log = getLogger(ProjectControllerTest.class);
 
-    private LocalDateTime start = LocalDateTime.of(2019, 1,12,0,0,0);
-    private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8);
+    private LocalDateTime start = LocalDateTime.of(2019, 1,12,3,7,13, 16);
+    private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8, 16);
     private ProjectDto projectDto =
-            new ProjectDto("Testing");
-
+            new ProjectDto("Testing", "설명은 특문포함 ㅇㅈㅇ!",
+                    "resian_1", "test@gmail.com", "01012341234", start, end,
+                    (long) 50000);
 
     @After
     public void tearDown() throws Exception {
         projectRepository.deleteAll();
-    }
-
-    @Test
-    public void 정상테스트 (){
-        ProjectDto projectDto = new ProjectDto("dㅇㄻㄹㅇ!!!!!!");
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity("/create", projectDto, String.class);
-
-        System.out.println(projectDto.toString());
-        assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
     }
 
     @Test
@@ -77,10 +65,12 @@ public class ProjectControllerTest extends BaseTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        List<Project> all = projectRepository.findAll();
+        List<Project> all = projectService.findAll();
+        System.out.println("size: "+all.size());
+
+        System.out.println(all.get(0));
 
         assertThat(all.get(0).getTitle()).isEqualTo(projectDto.getTitle());
-//        assertThat(all.get(0).getOriginatorEmail()).isEqualTo(projectDto.getOriginatorEmail());
+        assertThat(all.get(0).getOriginatorEmail()).isEqualTo(projectDto.getOriginatorEmail());
     }
-
 }

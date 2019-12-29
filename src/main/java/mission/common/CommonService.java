@@ -9,9 +9,10 @@ public class CommonService {
                 .state(CommonState.SUCCESS).build();
     }
 
-    public static CommonResponse failure () {
+    public static CommonResponse failure (Object projectData, String message) {
         return CommonResponse.builder()
-                .message("실패")
+                .projectData(projectData)
+                .message(message)
                 .state(CommonState.FAILURE).build();
     }
 
