@@ -24,7 +24,4 @@ public class ProjectStateDto {
         this.endTime = endTime;
     }
 
-    public ProjectState progressCheck() {
-
-    }
 }

@@ -1,9 +1,8 @@
 package mission.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import mission.common.CommonState;
-import mission.common.DayCheckUtil;
+import mission.common.ProjectStateService;
 import mission.common.Regex;
 import mission.domain.Project;
 import mission.domain.ProjectState;
@@ -77,7 +76,6 @@ public class ProjectDto {
         this.fundingSponsor = Regex.START_PROJECT;
         this.fundingAmount = Regex.START_PROJECT;
         this.show = true;
-        this.state = ProjectState.PREPARING;
         this.isDelect = CommonState.PERMIT;
     }
 
@@ -94,7 +92,6 @@ public class ProjectDto {
         this.fundingSponsor = Regex.START_PROJECT;
         this.fundingAmount = Regex.START_PROJECT;
         this.show = show;
-        this.state = ProjectState.PREPARING;
         this.isDelect = CommonState.PERMIT;
     }
 
@@ -103,7 +100,7 @@ public class ProjectDto {
                 startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state, isDelect);
     }
 
-    private ProjectState stateCheck (LocalDateTime startTime, LocalDateTime endTime) {
-        return DayCheckUtil.proceedingCheck(startTime, endTime);
+    public void stateUdapte(){
+        this.state = ProjectStateService.projectStateCheck(new ProjectStateDto(startTime, endTime, targetAmount, fundingAmount));
     }
 }
