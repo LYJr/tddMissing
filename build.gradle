@@ -13,6 +13,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 jar {
@@ -29,8 +30,8 @@ dependencies {
     compile 'org.projectlombok:lombok'
     compile 'org.springframework.boot:spring-boot-devtools'
 
-    compile "com.querydsl:querydsl-jpa"
-    compile "com.querydsl:querydsl-apt"
+    compile("com.querydsl:querydsl-jpa") // querydsl
+    compile("com.querydsl:querydsl-apt") // querydsl
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
@@ -40,7 +41,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
 def querydslSrcDir = 'src/main/generated'
 
 querydsl {

@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/web,java,gradle,eclipse,intellij
 # Edit at https://www.gitignore.io/?templates=web,java,gradle,eclipse,intellij
 
+generated
+
 ### Eclipse ###
 .metadata
 bin/

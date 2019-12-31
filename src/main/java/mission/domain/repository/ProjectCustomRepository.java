@@ -6,6 +6,6 @@ import mission.dto.ProjectListDto;
 import java.util.List;
 
 public interface ProjectCustomRepository<T> {
-    List<ProjectListDto> findAvailableProjectList(CommonState isDelect);
+    List<ProjectListDto> availableProjectList(CommonState isDelect);
 
 }

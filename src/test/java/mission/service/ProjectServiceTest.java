@@ -59,13 +59,13 @@ public class ProjectServiceTest extends ProjectTemplateTest {
 //        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
     }
 
-//    @Test
-//    public void 단일테스트 () {
-//        List<ProjectListDto> projectList = projectRepository.getProjectList(CommonState.PERMIT);
-//
-//        for (ProjectListDto projectListDto : projectList) {
-//            System.out.println(projectListDto);
-//        }
-//    }
+    @Test
+    public void 단일테스트 () {
+        List<ProjectListDto> projectList = projectRepository.availableProjectList(CommonState.PERMIT);
+
+        for (ProjectListDto projectListDto : projectList) {
+            System.out.println(projectListDto);
+        }
+    }
 
 }
