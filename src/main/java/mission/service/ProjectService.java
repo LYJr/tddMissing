@@ -1,15 +1,14 @@
 package mission.service;
 
-import mission.common.CommonState;
 import mission.domain.Project;
-import mission.domain.ProjectRepository;
+import mission.domain.repository.ProjectRepository;
 import mission.dto.ProjectDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProjectService {
@@ -21,20 +20,19 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Project findById(long id) {
-        Project project = projectRepository.findById(id)
+    public Project findById(UUID id) {
+        return projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 없습니다."));
-        return project;
     }
 
     public Project save (ProjectDto projectDto) {
-        return projectRepository.save(projectDto.to_project());
+        return projectRepository.save(projectDto.toProject());
     }
 
     @Transactional
-    public Project update(long id, ProjectDto projectDto) throws IllegalArgumentException {
+    public Project update(UUID id, ProjectDto projectDto) throws IllegalArgumentException {
         Project project = findById(id);
-        project = projectDto.to_project();
+        project = projectDto.toProject();
         return project;
     }
 

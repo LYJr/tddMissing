@@ -1,7 +1,6 @@
 package mission.common;
 
 public class Regex {
-
     //한글,숫자,영문 50자 이내
     //특수문자 불허
     public static final String TITLE = "^[a-zA-Z가-힣0-9)]+$";

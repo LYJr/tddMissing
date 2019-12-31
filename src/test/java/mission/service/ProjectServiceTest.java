@@ -1,9 +1,11 @@
 package mission.service;
 
+import mission.common.CommonState;
 import mission.controller.ProjectControllerTest;
 import mission.domain.Project;
-import mission.domain.ProjectRepository;
-import mission.dto.ProjectDto;
+import mission.domain.repository.ProjectRepository;
+import mission.dto.ProjectListDto;
+import mission.template.ProjectTemplateTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProjectServiceTest {
+public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -31,13 +32,6 @@ public class ProjectServiceTest {
 
     private static final Logger log = getLogger(ProjectControllerTest.class);
 
-    private LocalDateTime start = LocalDateTime.of(2019, 1, 12, 0, 0, 0);
-    private LocalDateTime end = LocalDateTime.of(2019, 2, 12, 1, 3, 8);
-    private ProjectDto projectDto =
-            new ProjectDto("Testing", "설명은 특문포함 ㅇㅈㅇ!",
-                    "resian_1", "test@gmail.com", "010514113412", start, end,
-                    (long) 50000);
-
     @After
     public void cleanup() {
         projectRepository.deleteAll();
@@ -46,6 +40,12 @@ public class ProjectServiceTest {
     @Before
     public void 저장() {
         projectService.save(projectDto);
+        projectService.save(projectDto1);
+        projectService.save(projectDto2);
+        projectService.save(projectDto3);
+        projectService.save(projectDto4);
+        projectService.save(projectDto5);
+        projectService.save(projectDto6);
     }
 
     @Test
@@ -59,9 +59,13 @@ public class ProjectServiceTest {
 //        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
     }
 
-    @Test
-    public void 단일_호출() {
-        Project project = projectService.findById(1);
-        System.out.println(project);
-    }
+//    @Test
+//    public void 단일테스트 () {
+//        List<ProjectListDto> projectList = projectRepository.getProjectList(CommonState.PERMIT);
+//
+//        for (ProjectListDto projectListDto : projectList) {
+//            System.out.println(projectListDto);
+//        }
+//    }
+
 }
