@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class ProjectController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class ProjectController {
 
     private static final Logger log = getLogger(ProjectController.class);
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public CommonResponse create(@RequestBody @Valid ProjectDto projectDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return CommonResponse.failure(bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
@@ -34,12 +34,12 @@ public class ProjectController {
         return CommonResponse.success(projectDto.toString());
     }
 
-    @GetMapping("update-form")
+    @GetMapping("/update-form")
     public CommonResponse updateData (@PathVariable UUID id) {
         return CommonResponse.success(projectService.findById(id));
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public CommonResponse update(@PathVariable UUID id, @Valid @RequestBody ProjectDto projectDto) {
         projectService.update(id, projectDto);
         return CommonResponse.success(projectDto);
@@ -51,13 +51,13 @@ public class ProjectController {
 //        return CommonService.delect(id);
 //    }
 
-    @GetMapping("show/{id}")
+    @GetMapping("/show/{id}")
     public CommonResponse projectShow (@PathVariable UUID id) {
         projectService.findById(id);
         return CommonResponse.success(projectService.findById(id));
     }
 
-    @GetMapping("projectList")
+    @GetMapping("/projectList")
     public CommonResponse projectList() {
         return CommonResponse.success(projectService.findAll());
     }

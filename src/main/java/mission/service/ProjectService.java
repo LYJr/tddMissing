@@ -1,8 +1,10 @@
 package mission.service;
 
+import mission.common.CommonState;
 import mission.domain.Project;
 import mission.domain.repository.ProjectRepository;
 import mission.dto.ProjectDto;
+import mission.dto.ProjectListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,10 @@ public class ProjectService {
 
     public List<Project> findAll(){
         return projectRepository.findAll();
+    }
+
+    public List<ProjectListDto> availableProjectList() {
+        return projectRepository.availableProjectList(CommonState.PERMIT);
     }
 
     public Project findById(UUID id) {

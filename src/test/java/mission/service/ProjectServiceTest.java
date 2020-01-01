@@ -61,7 +61,7 @@ public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Test
     public void 단일테스트 () {
-        List<ProjectListDto> projectList = projectRepository.availableProjectList(CommonState.PERMIT);
+        List<ProjectListDto> projectList = projectService.availableProjectList();
 
         for (ProjectListDto projectListDto : projectList) {
             System.out.println(projectListDto);
