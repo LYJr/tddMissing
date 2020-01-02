@@ -9,12 +9,15 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDto {
+    private UUID id;
 
     @NotBlank(message = "프로젝트 이름을 작성해주세요.")
     @Size(max = 50)
@@ -79,22 +82,7 @@ public class ProjectDto {
     }
 
     //프로젝트 비공개로 설정시 생성
-//    public ProjectDto(@NotBlank(message = "프로젝트 이름을 작성해주세요.") @Size(max = 50) @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.") String title, @Size(max = 225) String explanation, @NotNull(message = "창작자 이름을 작성해주세요.") @Size(max = 20) @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.") String originatorName, @NotBlank(message = "메일을 작성해주세요.") @Email(message = "메일의 양식을 지켜주세요.") String originatorEmail, @NotBlank(message = "전화번호를 작성해주세요.") @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.") String originatorPhone, @NotNull(message = "프로젝트 시작 시간을 입력해주세요.") LocalDateTime startTime, @NotNull(message = "프로젝트 종료 시간을 입력해주세요.") LocalDateTime endTime, @NotNull(message = "목표액을 입력해주세요.") @Range(max = 100000000) Long targetAmount, CommonState show) {
-//        this.title = title;
-//        this.explanation = explanation;
-//        this.originatorName = originatorName;
-//        this.originatorEmail = originatorEmail;
-//        this.originatorPhone = originatorPhone;
-//        this.startTime = startTime;
-//        this.endTime = endTime;
-//        this.targetAmount = targetAmount;
-//        this.fundingSponsor = Regex.START_PROJECT;
-//        this.fundingAmount = Regex.START_PROJECT;
-//        this.show = show;
-//        this.isDelect = CommonState.PERMIT;
-//    }
-
-    public ProjectDto(@NotBlank(message = "프로젝트 이름을 작성해주세요.") @Size(max = 50) @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.") String title, @Size(max = 225) String explanation, @NotNull(message = "창작자 이름을 작성해주세요.") @Size(max = 20) @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.") String originatorName, @NotBlank(message = "메일을 작성해주세요.") @Email(message = "메일의 양식을 지켜주세요.") String originatorEmail, @NotBlank(message = "전화번호를 작성해주세요.") @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.") String originatorPhone, @NotNull(message = "프로젝트 시작 시간을 입력해주세요.") LocalDateTime startTime, @NotNull(message = "프로젝트 종료 시간을 입력해주세요.") LocalDateTime endTime, @NotNull(message = "목표액을 입력해주세요.") @Range(max = 100000000) Long targetAmount, CommonState isDelect) {
+    public ProjectDto(@NotBlank(message = "프로젝트 이름을 작성해주세요.") @Size(max = 50) @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.") String title, @Size(max = 225) String explanation, @NotNull(message = "창작자 이름을 작성해주세요.") @Size(max = 20) @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.") String originatorName, @NotBlank(message = "메일을 작성해주세요.") @Email(message = "메일의 양식을 지켜주세요.") String originatorEmail, @NotBlank(message = "전화번호를 작성해주세요.") @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.") String originatorPhone, @NotNull(message = "프로젝트 시작 시간을 입력해주세요.") LocalDateTime startTime, @NotNull(message = "프로젝트 종료 시간을 입력해주세요.") LocalDateTime endTime, @NotNull(message = "목표액을 입력해주세요.") @Range(max = 100000000) Long targetAmount, CommonState show) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
@@ -105,10 +93,8 @@ public class ProjectDto {
         this.targetAmount = targetAmount;
         this.fundingSponsor = Regex.START_PROJECT;
         this.fundingAmount = Regex.START_PROJECT;
-        this.fundingSponsor = Regex.START_PROJECT;
-        this.fundingAmount = Regex.START_PROJECT;
-        this.show = CommonState.OPEN;
-        this.isDelect = isDelect;
+        this.show = show;
+        this.isDelect = CommonState.PERMIT;
     }
 
     public Project toProject() {

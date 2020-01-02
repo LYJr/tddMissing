@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -28,7 +30,7 @@ public class CommonResponse<T> {
                 .state(CommonState.FAILURE).build();
     }
 
-    public static CommonResponse delect (Long id) {
+    public static CommonResponse delect (UUID id) {
         return CommonResponse.builder()
                 .projectData(id)
                 .message("삭제 되었습니다.")

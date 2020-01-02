@@ -45,21 +45,27 @@ public class ProjectController {
         return CommonResponse.success(projectDto);
     }
 
-//    @DeleteMapping("delect/{id}")
-//    public CommonResponse delect(@PathVariable Long id) {
-//        projectService.delect(id);
-//        return CommonService.delect(id);
-//    }
+    @DeleteMapping("delect/{id}")
+    public CommonResponse delect(@PathVariable UUID id) {
+        projectService.delect(id);
+        return CommonResponse.delect(id);
+    }
 
     @GetMapping("/show/{id}")
     public CommonResponse projectShow (@PathVariable UUID id) {
         projectService.findById(id);
-        return CommonResponse.success(projectService.findById(id));
+        return CommonResponse.success(projectService.findById(id).toProjectDto());
     }
 
     @GetMapping("/projectList")
-    public CommonResponse projectList() {
-        return CommonResponse.success(projectService.findAll());
+    public CommonResponse projectList(Pageable pageable) {
+        return CommonResponse.success(projectService.availableProjectList(pageable));
+    }
+
+    @PostMapping("/sponsorship")
+    public CommonResponse sponsorship(@PathVariable UUID id, @PathVariable long fundingAmount) {
+        projectService.sponsorship(id, fundingAmount);
+        return CommonResponse.success(projectService.sponsorship(id, fundingAmount));
     }
 
 }

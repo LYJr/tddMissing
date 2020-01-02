@@ -17,4 +17,6 @@ public class Regex {
     public static final long AMOUNT = 100000000;
 
     public static final long SPONSOR = 100000;
+
+    public static final int PAGE_LIMIT = 10;
 }

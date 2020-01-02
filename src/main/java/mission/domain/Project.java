@@ -99,7 +99,7 @@ public class Project {
 
     public ProjectDto toProjectDto () {
         return new ProjectDto(
-                title, explanation, originatorName, originatorEmail, originatorPhone,
+                id, title, explanation, originatorName, originatorEmail, originatorPhone,
                 startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state, isDelect);
     }
 
@@ -127,5 +127,14 @@ public class Project {
 
     private boolean isEndTimeCheck(LocalDateTime end) {
         return end.isBefore(LocalDateTime.now()) || end.isEqual(LocalDateTime.now());
+    }
+
+    public void sponsorship(long fundingAmount) {
+        this.fundingSponsor++;
+        this.fundingAmount = this.fundingAmount + fundingAmount;
+    }
+
+    public void update(ProjectDto projectDto) {
+        this.targetAmount = projectDto.getTargetAmount();
     }
 }

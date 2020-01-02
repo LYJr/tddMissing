@@ -6,6 +6,8 @@ import mission.domain.repository.ProjectRepository;
 import mission.dto.ProjectDto;
 import mission.dto.ProjectListDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +24,8 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public List<ProjectListDto> availableProjectList() {
-        return projectRepository.availableProjectList(CommonState.PERMIT);
+    public Page<ProjectListDto> availableProjectList(Pageable pageable) {
+        return projectRepository.availablePageProjectList(pageable, CommonState.PERMIT);
     }
 
     public Project findById(UUID id) {
@@ -42,23 +44,17 @@ public class ProjectService {
         return project;
     }
 
-//    @Transactional
-//    public long delect(long id) {
-//        Project project = findById(id);
-//        project.isDelect();
-//        return id;
-//    }
-//
-//    public List<Project> permitProjectList () {
-//        List<Project> findAll = findAll();
-//
-//        List<Project> projects = new ArrayList<>();
-//        for (Project project : findAll) {
-//            if(project.getIsDelect() == CommonState.PERMIT) {
-//                projects.add(project);
-//            }
-//        }
-//        return projects;
-//    }
+    @Transactional
+    public UUID delect(UUID id) {
+        Project project = findById(id);
+        project.isDelect();
+        return id;
+    }
 
+    @Transactional
+    public Project sponsorship(UUID id, long fundingAmount) {
+        Project project = findById(id);
+        project.sponsorship(fundingAmount);
+        return project;
+    }
 }

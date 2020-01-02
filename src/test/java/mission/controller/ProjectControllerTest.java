@@ -17,8 +17,11 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -58,11 +61,31 @@ public class ProjectControllerTest extends ProjectTemplateTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         List<Project> all = projectService.findAll();
-        System.out.println("size: " + all.size());
-
-        System.out.println(all.get(0));
 
         assertThat(all.get(0).getTitle()).isEqualTo(projectDto.getTitle());
         assertThat(all.get(0).getOriginatorEmail()).isEqualTo(projectDto.getOriginatorEmail());
+    }
+
+    @Test
+    public void sponsorshipTest() throws Exception {
+        String url = "http://localhost:" + port + "/sponsorship";
+        projectService.save(projectDto);
+        List<Project> find = projectService.findAll();
+
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+
+        param.add("id", find.get(0).getId());
+        param.add("fundingAmount", 3000);
+
+        ResponseEntity<CommonResponse> responseEntity = restTemplate
+                .postForEntity(url, param, CommonResponse.class);
+
+        log.debug("responsEntity : {} ", responseEntity.toString());
+
+//        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        List<Project> all = projectService.findAll();
+
+        System.out.println(all.get(0));
     }
 }

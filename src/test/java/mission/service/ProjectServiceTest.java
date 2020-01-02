@@ -4,6 +4,7 @@ import mission.common.CommonState;
 import mission.controller.ProjectControllerTest;
 import mission.domain.Project;
 import mission.domain.repository.ProjectRepository;
+import mission.dto.ProjectDto;
 import mission.dto.ProjectListDto;
 import mission.template.ProjectTemplateTest;
 import org.junit.After;
@@ -13,8 +14,13 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,33 +45,54 @@ public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Before
     public void 저장() {
-        projectService.save(projectDto);
-        projectService.save(projectDto1);
-        projectService.save(projectDto2);
-        projectService.save(projectDto3);
-        projectService.save(projectDto4);
-        projectService.save(projectDto5);
-        projectService.save(projectDto6);
+        List<ProjectDto> projectDtos = createDto();
+
+        long i = 1000;
+        long j = 0;
+        for (ProjectDto dto : projectDtos) {
+            dto.setFundingSponsor(j);
+            dto.setFundingAmount(i);
+            projectService.save(dto);
+            i = i*2;
+            j++;
+        }
     }
 
     @Test
     public void 저장_호출() {
         List<Project> projectList = projectService.findAll();
-
         Project project = projectList.get(0);
-        System.out.println(project);
-
         assertThat(project.getTitle()).isEqualTo(projectDto.getTitle());
-//        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
     }
 
     @Test
-    public void 단일테스트 () {
-        List<ProjectListDto> projectList = projectService.availableProjectList();
+    public void pageTest() {
+        String sort = "endTime";
+        //Pageable pageable = PageRequest.of(2, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(2, 10, Sort.Direction.DESC, sort);
 
+        Page<ProjectListDto> projectList = projectService.availableProjectList(pageable);
         for (ProjectListDto projectListDto : projectList) {
             System.out.println(projectListDto);
+            System.out.println();
         }
+    }
+
+    @Test
+    public void 삭제() {
+        projectService.save(projectDto);
+        List<Project> find = projectService.findAll();
+        projectService.delect(find.get(0).getId());
+
+        assertThat(projectService.findById(find.get(0).getId()).getIsDelect()).isEqualTo(CommonState.DELECT);
+    }
+
+    @Test
+    public void 펀딩() {
+        List<Project> find = projectService.findAll();
+        Project project =projectService.sponsorship(find.get(0).getId(), 3000);
+
+       assertThat(project.getFundingAmount()).isEqualTo(4000);
     }
 
 }
