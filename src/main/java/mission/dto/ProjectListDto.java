@@ -8,8 +8,7 @@ import mission.domain.ProjectState;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-//프로젝트 List로 보여줄 경우
-//프로젝트 제목, 창작자 이름, 목표액, 후원수, 후원액, 프로젝트 상태, 시작일, 마감일
+
 @Getter
 @ToString
 @NoArgsConstructor

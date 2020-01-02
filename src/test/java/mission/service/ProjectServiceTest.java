@@ -20,8 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -66,9 +66,16 @@ public class ProjectServiceTest extends ProjectTemplateTest {
     }
 
     @Test
+    public void oneSelect() {
+        List<Project> all = projectService.findAll();
+
+        Project project = projectService.findByIdAndToDelete(all.get(0).getId());
+        System.out.println(project);
+    }
+
+    @Test
     public void pageTest() {
         String sort = "endTime";
-        //Pageable pageable = PageRequest.of(2, 10, Sort.by(sort));
         Pageable pageable = PageRequest.of(2, 10, Sort.Direction.DESC, sort);
 
         Page<ProjectListDto> projectList = projectService.availableProjectList(pageable);
@@ -82,9 +89,10 @@ public class ProjectServiceTest extends ProjectTemplateTest {
     public void 삭제() {
         projectService.save(projectDto);
         List<Project> find = projectService.findAll();
-        projectService.delect(find.get(0).getId());
+        projectService.delete(find.get(0).getId());
 
-        assertThat(projectService.findById(find.get(0).getId()).getIsDelect()).isEqualTo(CommonState.DELECT);
+        Project p = projectRepository.findById(find.get(0).getId()).get();
+        assertThat(p.getToDelete()).isEqualTo(CommonState.DELECT);
     }
 
     @Test

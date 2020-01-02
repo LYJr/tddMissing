@@ -63,20 +63,9 @@ public class Project {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private CommonState isDelect;
+    private CommonState toDelete;
 
-    public Project(String title, String originatorName, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, Long fundingSponsor, Long fundingAmount, ProjectState state) {
-        this.title = title;
-        this.originatorName = originatorName;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.targetAmount = targetAmount;
-        this.fundingSponsor = fundingSponsor;
-        this.fundingAmount = fundingAmount;
-        this.state = state;
-    }
-
-    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, Long fundingSponsor, Long fundingAmount, CommonState show, CommonState isDelect) {
+    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, Long fundingSponsor, Long fundingAmount, CommonState show) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
@@ -87,34 +76,42 @@ public class Project {
         this.targetAmount = targetAmount;
         this.fundingSponsor = fundingSponsor;
         this.fundingAmount = fundingAmount;
-        this.show = show;
+        this.show = inputShow(show);
         this.state = stateUpdate(startTime, endTime, targetAmount, fundingAmount);
-        this.isDelect = isDelect;
+        this.toDelete = CommonState.PERMIT;
     }
 
-    public UUID isDelect() {
-        this.isDelect = CommonState.DELECT;
-        return id;
+    private CommonState inputShow(CommonState show) {
+        if(show == null){
+            return CommonState.OPEN;
+        }
+        return CommonState.AIRTIGHT;
     }
 
-    public ProjectDto toProjectDto () {
-        return new ProjectDto(
-                id, title, explanation, originatorName, originatorEmail, originatorPhone,
-                startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state, isDelect);
+    public void update(ProjectDto projectDto) {
+        this.title = projectDto.getTitle();
+        this.explanation = projectDto.getExplanation();
+        this.originatorName = projectDto.getOriginatorName();
+        this.originatorEmail = projectDto.getOriginatorEmail();
+        this.originatorPhone = projectDto.getOriginatorPhone();
+        this.startTime = projectDto.getStartTime();
+        this.endTime = projectDto.getEndTime();
+        this.targetAmount = projectDto.getTargetAmount();
+        this.fundingSponsor = projectDto.getFundingSponsor();
+        this.fundingAmount = projectDto.getFundingAmount();
+        this.show = inputShow(show);
+        this.state = stateUpdate(projectDto.getStartTime(), projectDto.getEndTime(), projectDto.getTargetAmount(), projectDto.getFundingAmount());
     }
 
     private ProjectState stateUpdate(LocalDateTime startTime, LocalDateTime endTime, long targetAmount, long fundingAmount) {
-        ProjectState projectState = ProjectState.PROCEEDING;
-
         if(!isStartTimeCheck(startTime)) {
-            projectState = ProjectState.PREPARING;
+            return ProjectState.PREPARING;
         }
 
         if(isStartTimeCheck(startTime) && isEndTimeCheck(endTime)) {
             return isSuccess(targetAmount, fundingAmount);
         }
-
-        return projectState;
+        return ProjectState.PROCEEDING;
     }
 
     private ProjectState isSuccess(long targetAmountm, long fundingAmount) {
@@ -134,7 +131,14 @@ public class Project {
         this.fundingAmount = this.fundingAmount + fundingAmount;
     }
 
-    public void update(ProjectDto projectDto) {
-        this.targetAmount = projectDto.getTargetAmount();
+    public UUID inputDelete() {
+        this.toDelete = CommonState.DELECT;
+        return id;
+    }
+
+    public ProjectDto toProjectDto () {
+        return new ProjectDto(
+                id, title, explanation, originatorName, originatorEmail, originatorPhone,
+                startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state);
     }
 }

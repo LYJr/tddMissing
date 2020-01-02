@@ -51,7 +51,7 @@ public class ProjectControllerTest extends ProjectTemplateTest {
 
     @Test
     public void saveTest() throws Exception {
-        String url = "http://localhost:" + port + "/create";
+        String url = "http://localhost:" + port + "/project/create";
 
         ResponseEntity<CommonResponse> responseEntity = restTemplate
                 .postForEntity(url, projectDto, CommonResponse.class);
@@ -68,7 +68,7 @@ public class ProjectControllerTest extends ProjectTemplateTest {
 
     @Test
     public void sponsorshipTest() throws Exception {
-        String url = "http://localhost:" + port + "/sponsorship";
+        String url = "http://localhost:" + port + "/project/sponsorship";
         projectService.save(projectDto);
         List<Project> find = projectService.findAll();
 
