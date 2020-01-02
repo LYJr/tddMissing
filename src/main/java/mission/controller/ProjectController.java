@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/project")
 public class ProjectController {
 
     @Autowired
@@ -27,45 +27,47 @@ public class ProjectController {
     @PostMapping("/create")
     public CommonResponse create(@RequestBody @Valid ProjectDto projectDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return CommonResponse.failure(bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
+            return CommonResponse.failure(bindingResult);
         }
 
         projectService.save(projectDto);
         return CommonResponse.success(projectDto.toString());
     }
 
-    @GetMapping("/update-form")
-    public CommonResponse updateData (@PathVariable UUID id) {
-        return CommonResponse.success(projectService.findById(id));
+    @GetMapping("/update-form/{id}")
+    public CommonResponse updateData(@PathVariable UUID id) {
+        return CommonResponse.success(projectService.findByIdAndToDelete(id));
     }
 
     @PutMapping("/update/{id}")
-    public CommonResponse update(@PathVariable UUID id, @Valid @RequestBody ProjectDto projectDto) {
+    public CommonResponse update(@PathVariable UUID id, @Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return CommonResponse.failure(bindingResult);
+        }
         projectService.update(id, projectDto);
         return CommonResponse.success(projectDto);
     }
 
-    @DeleteMapping("delect/{id}")
-    public CommonResponse delect(@PathVariable UUID id) {
-        projectService.delect(id);
-        return CommonResponse.delect(id);
-    }
-
     @GetMapping("/show/{id}")
     public CommonResponse projectShow (@PathVariable UUID id) {
-        projectService.findById(id);
-        return CommonResponse.success(projectService.findById(id).toProjectDto());
+        projectService.findByIdAndToDelete(id);
+        return CommonResponse.success(projectService.findByIdAndToDelete(id).toProjectDto());
     }
 
     @GetMapping("/projectList")
-    public CommonResponse projectList(Pageable pageable) {
+    public CommonResponse projectList(@RequestBody Pageable pageable) {
         return CommonResponse.success(projectService.availableProjectList(pageable));
     }
 
-    @PostMapping("/sponsorship")
-    public CommonResponse sponsorship(@PathVariable UUID id, @PathVariable long fundingAmount) {
+    @DeleteMapping("delect/{id}")
+    public CommonResponse delete(@PathVariable UUID id) {
+        projectService.delete(id);
+        return CommonResponse.delete(id);
+    }
+
+    @PostMapping("/sponsorship/{id}")
+    public CommonResponse sponsorship(@PathVariable UUID id, @RequestBody long fundingAmount) {
         projectService.sponsorship(id, fundingAmount);
         return CommonResponse.success(projectService.sponsorship(id, fundingAmount));
     }
-
 }

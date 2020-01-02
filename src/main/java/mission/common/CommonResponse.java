@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.BindingResult;
 
 import java.util.UUID;
 
@@ -23,17 +24,25 @@ public class CommonResponse<T> {
                 .state(CommonState.SUCCESS).build();
     }
 
-    public static CommonResponse failure (Object projectData, String message) {
+    public static CommonResponse failure(BindingResult bindingResult) {
         return CommonResponse.builder()
-                .projectData(projectData)
-                .message(message)
+                .projectData(bindingField(bindingResult))
+                .message(bindingMessage(bindingResult))
                 .state(CommonState.FAILURE).build();
     }
 
-    public static CommonResponse delect (UUID id) {
+    public static CommonResponse delete (UUID id) {
         return CommonResponse.builder()
                 .projectData(id)
                 .message("삭제 되었습니다.")
                 .state(CommonState.DELECT).build();
+    }
+
+    private static String bindingField(BindingResult bindingResult) {
+        return bindingResult.getFieldError().getField();
+    }
+
+    private static String bindingMessage(BindingResult bindingResult) {
+        return bindingResult.getFieldError().getDefaultMessage();
     }
 }

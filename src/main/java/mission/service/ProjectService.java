@@ -28,32 +28,31 @@ public class ProjectService {
         return projectRepository.availablePageProjectList(pageable, CommonState.PERMIT);
     }
 
-    public Project findById(UUID id) {
-        return projectRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 없습니다."));
+    public Project findByIdAndToDelete(UUID id) {
+        return projectRepository.findByIdAndToDelete(id, CommonState.PERMIT);
     }
 
-    public Project save (ProjectDto projectDto) {
+    public Project save(ProjectDto projectDto) {
         return projectRepository.save(projectDto.toProject());
     }
 
     @Transactional
     public Project update(UUID id, ProjectDto projectDto) throws IllegalArgumentException {
-        Project project = findById(id);
-        project = projectDto.toProject();
+        Project project = findByIdAndToDelete(id);
+        project.update(projectDto);
         return project;
     }
 
     @Transactional
-    public UUID delect(UUID id) {
-        Project project = findById(id);
-        project.isDelect();
+    public UUID delete(UUID id) {
+        Project project = findByIdAndToDelete(id);
+        project.inputDelete();
         return id;
     }
 
     @Transactional
     public Project sponsorship(UUID id, long fundingAmount) {
-        Project project = findById(id);
+        Project project = findByIdAndToDelete(id);
         project.sponsorship(fundingAmount);
         return project;
     }

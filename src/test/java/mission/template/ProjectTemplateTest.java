@@ -26,7 +26,7 @@ public class ProjectTemplateTest {
     protected ProjectDto projectDto =
             new ProjectDto("Testing", "설명은 특문포함 ㅇㅈㅇ!",
                     "resian_1", "test@gmail.com", "01012341234", start, end,
-                    (long) 50000);
+                    (long) 50000, null);
 
     protected List<ProjectDto> createDto() {
         Random random = new Random();
@@ -37,7 +37,7 @@ public class ProjectTemplateTest {
             ProjectDto p = new ProjectDto("Testing", "설명은 특문포함 ㅇㅈㅇ!" + j,
                     "resian_" + j, "test" + j + "@gmail.com", "0101234111" + j, start,
                     LocalDateTime.of(2020, 1, random.nextInt(12)+1, random.nextInt(23), 0, 30),
-                    (long) 50000);
+                    (long) 50000, null);
             projectDtos.add(p);
             j++;
         }
