@@ -1,9 +1,12 @@
 package mission.service;
 
+import mission.common.CommonState;
 import mission.controller.ProjectControllerTest;
 import mission.domain.Project;
-import mission.domain.ProjectRepository;
+import mission.domain.repository.ProjectRepository;
 import mission.dto.ProjectDto;
+import mission.dto.ProjectListDto;
+import mission.template.ProjectTemplateTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +14,13 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +28,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProjectServiceTest {
+public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -31,37 +38,61 @@ public class ProjectServiceTest {
 
     private static final Logger log = getLogger(ProjectControllerTest.class);
 
-    private LocalDateTime start = LocalDateTime.of(2019, 1,12,0,0,0);
-    private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8);
-    private ProjectDto projectDto =
-            new ProjectDto("제목", "설명", "이름", "email@a.a", "0000000", start, end, (long)3000);
-
     @After
-    public void cleanup(){
+    public void cleanup() {
         projectRepository.deleteAll();
     }
 
     @Before
     public void 저장() {
-        projectService.save(projectDto);
+        List<ProjectDto> projectDtos = createDto();
+
+        long i = 1000;
+        long j = 0;
+        for (ProjectDto dto : projectDtos) {
+            dto.setFundingSponsor(j);
+            dto.setFundingAmount(i);
+            projectService.save(dto);
+            i = i*2;
+            j++;
+        }
     }
 
     @Test
     public void 저장_호출() {
         List<Project> projectList = projectService.findAll();
-
         Project project = projectList.get(0);
-        System.out.println(project);
-
         assertThat(project.getTitle()).isEqualTo(projectDto.getTitle());
-        assertThat(project.getExplanation()).isEqualTo(projectDto.getExplanation());
     }
 
     @Test
-    public void 단일_호출() {
-        Project project = projectService.findById(1);
-        System.out.println(project);
+    public void pageTest() {
+        String sort = "endTime";
+        //Pageable pageable = PageRequest.of(2, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(2, 10, Sort.Direction.DESC, sort);
 
-
+        Page<ProjectListDto> projectList = projectService.availableProjectList(pageable);
+        for (ProjectListDto projectListDto : projectList) {
+            System.out.println(projectListDto);
+            System.out.println();
+        }
     }
+
+    @Test
+    public void 삭제() {
+        projectService.save(projectDto);
+        List<Project> find = projectService.findAll();
+        projectService.delect(find.get(0).getId());
+
+        assertThat(projectService.findById(find.get(0).getId()).getIsDelect()).isEqualTo(CommonState.DELECT);
+    }
+
+    @Test
+    public void 펀딩() {
+        List<Project> find = projectService.findAll();
+        Project project =projectService.sponsorship(find.get(0).getId(), 3000);
+
+       assertThat(project.getFundingAmount()).isEqualTo(4000);
+    }
+
 }

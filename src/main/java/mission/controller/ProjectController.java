@@ -1,21 +1,22 @@
 package mission.controller;
 
-import mission.common.CommonService;
 import mission.common.CommonResponse;
-import mission.common.CommonState;
 import mission.dto.ProjectDto;
 import mission.service.ProjectService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
+
+import java.util.UUID;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class ProjectController {
 
     @Autowired
@@ -23,43 +24,48 @@ public class ProjectController {
 
     private static final Logger log = getLogger(ProjectController.class);
 
-    @PostMapping("create")
-    //익셉션 추가
-    public CommonResponse create(@Valid @RequestBody ProjectDto projectDto) {
+    @PostMapping("/create")
+    public CommonResponse create(@RequestBody @Valid ProjectDto projectDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return CommonResponse.failure(bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
+        }
+
         projectService.save(projectDto);
-        return CommonResponse.builder()
-                .projectData(projectDto.to_project())
-                .message("ok?")
-                .state(CommonState.SUCCESS).build();
+        return CommonResponse.success(projectDto.toString());
     }
 
-    @GetMapping("update/")
-    public CommonResponse updateData (@PathVariable Long id) {
-        return CommonService.success(projectService.findById(id));
+    @GetMapping("/update-form")
+    public CommonResponse updateData (@PathVariable UUID id) {
+        return CommonResponse.success(projectService.findById(id));
     }
 
-    @PutMapping("update/{id}")
-    public CommonResponse update(@PathVariable Long id, @Valid @RequestBody ProjectDto projectDto) {
+    @PutMapping("/update/{id}")
+    public CommonResponse update(@PathVariable UUID id, @Valid @RequestBody ProjectDto projectDto) {
         projectService.update(id, projectDto);
-        return CommonService.success(projectDto);
+        return CommonResponse.success(projectDto);
     }
 
     @DeleteMapping("delect/{id}")
-    public CommonResponse delect(@PathVariable Long id) {
+    public CommonResponse delect(@PathVariable UUID id) {
         projectService.delect(id);
-        return CommonService.delect(id);
+        return CommonResponse.delect(id);
     }
 
-    @GetMapping("show/")
-    public CommonResponse projectShow (@PathVariable Long id) {
+    @GetMapping("/show/{id}")
+    public CommonResponse projectShow (@PathVariable UUID id) {
         projectService.findById(id);
-        return CommonService.success(projectService.findById(id));
+        return CommonResponse.success(projectService.findById(id).toProjectDto());
     }
 
-    @GetMapping("projectList/")
-    public CommonResponse projectList () {
-        return null;
+    @GetMapping("/projectList")
+    public CommonResponse projectList(Pageable pageable) {
+        return CommonResponse.success(projectService.availableProjectList(pageable));
     }
 
+    @PostMapping("/sponsorship")
+    public CommonResponse sponsorship(@PathVariable UUID id, @PathVariable long fundingAmount) {
+        projectService.sponsorship(id, fundingAmount);
+        return CommonResponse.success(projectService.sponsorship(id, fundingAmount));
+    }
 
 }

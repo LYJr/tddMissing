@@ -3,10 +3,11 @@ package mission.domain;
 import lombok.*;
 import mission.common.CommonState;
 import mission.dto.ProjectDto;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -18,8 +19,9 @@ import java.time.LocalDateTime;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    private UUID id;
 
     @Column
     private String title;
@@ -46,21 +48,35 @@ public class Project {
     private Long targetAmount;
 
     @Column
-    private Long fundingCount;
+    private Long fundingSponsor;
 
     @Column
     private Long fundingAmount;
 
     @Column
-    private boolean show;
+    @Enumerated(EnumType.STRING)
+    private CommonState show;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private ProjectState state;
 
     @Column
-    private CommonState 허용;
+    @Enumerated(EnumType.STRING)
+    private CommonState isDelect;
 
-    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, boolean show, ProjectState state, CommonState 허용) {
+    public Project(String title, String originatorName, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, Long fundingSponsor, Long fundingAmount, ProjectState state) {
+        this.title = title;
+        this.originatorName = originatorName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.targetAmount = targetAmount;
+        this.fundingSponsor = fundingSponsor;
+        this.fundingAmount = fundingAmount;
+        this.state = state;
+    }
+
+    public Project(String title, String explanation, String originatorName, String originatorEmail, String originatorPhone, LocalDateTime startTime, LocalDateTime endTime, Long targetAmount, Long fundingSponsor, Long fundingAmount, CommonState show, CommonState isDelect) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
@@ -69,13 +85,56 @@ public class Project {
         this.startTime = startTime;
         this.endTime = endTime;
         this.targetAmount = targetAmount;
+        this.fundingSponsor = fundingSponsor;
+        this.fundingAmount = fundingAmount;
         this.show = show;
-        this.state = state;
-        this.허용 = 허용;
+        this.state = stateUpdate(startTime, endTime, targetAmount, fundingAmount);
+        this.isDelect = isDelect;
     }
 
-    public long isDelect() {
-        this.허용 = CommonState.DELECT;
+    public UUID isDelect() {
+        this.isDelect = CommonState.DELECT;
         return id;
+    }
+
+    public ProjectDto toProjectDto () {
+        return new ProjectDto(
+                id, title, explanation, originatorName, originatorEmail, originatorPhone,
+                startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state, isDelect);
+    }
+
+    private ProjectState stateUpdate(LocalDateTime startTime, LocalDateTime endTime, long targetAmount, long fundingAmount) {
+        ProjectState projectState = ProjectState.PROCEEDING;
+
+        if(!isStartTimeCheck(startTime)) {
+            projectState = ProjectState.PREPARING;
+        }
+
+        if(isStartTimeCheck(startTime) && isEndTimeCheck(endTime)) {
+            return isSuccess(targetAmount, fundingAmount);
+        }
+
+        return projectState;
+    }
+
+    private ProjectState isSuccess(long targetAmountm, long fundingAmount) {
+        return targetAmountm <= fundingAmount ? ProjectState.SUCCESS : ProjectState.FAILURE;
+    }
+
+    private boolean isStartTimeCheck(LocalDateTime start) {
+        return start.isEqual(LocalDateTime.now()) || start.isBefore(LocalDateTime.now());
+    }
+
+    private boolean isEndTimeCheck(LocalDateTime end) {
+        return end.isBefore(LocalDateTime.now()) || end.isEqual(LocalDateTime.now());
+    }
+
+    public void sponsorship(long fundingAmount) {
+        this.fundingSponsor++;
+        this.fundingAmount = this.fundingAmount + fundingAmount;
+    }
+
+    public void update(ProjectDto projectDto) {
+        this.targetAmount = projectDto.getTargetAmount();
     }
 }

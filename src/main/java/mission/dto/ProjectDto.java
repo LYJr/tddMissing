@@ -1,73 +1,72 @@
 package mission.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import mission.common.CommonState;
+import mission.common.Regex;
 import mission.domain.Project;
 import mission.domain.ProjectState;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDto {
+    private UUID id;
 
-    //프로젝트 이름
-    @NotNull
+    @NotBlank(message = "프로젝트 이름을 작성해주세요.")
     @Size(max = 50)
+    @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.")
     private String title;
 
-    //설명
-    @NotNull
     @Size(max = 225)
     private String explanation;
 
-    //창작자 이름
-    @NotNull
+    @NotNull(message = "창작자 이름을 작성해주세요.")
     @Size(max = 20)
+    @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.")
     private String originatorName;
 
-    @NotNull
-    @Email
+    @NotBlank(message = "메일을 작성해주세요.")
+    @Email(message = "메일의 양식을 지켜주세요.")
     private String originatorEmail;
 
-    @NotNull
+    @NotBlank(message = "전화번호를 작성해주세요.")
+    @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.")
     private String originatorPhone;
 
-    @NotNull
+    @NotNull(message = "프로젝트 시작 시간을 입력해주세요.")
     private LocalDateTime startTime;
 
-    @NotNull
+    @NotNull(message = "프로젝트 종료 시간을 입력해주세요.")
     private LocalDateTime endTime;
 
-    //목표액
-    @NotNull
-    @Size(max = 100000000)
+    @NotNull(message = "목표액을 입력해주세요.")
+    @Range(max = Regex.AMOUNT, message = "금액이 맞지 않습니다.")
     private Long targetAmount;
 
-    //후원수
-    @Size(max = 100000)
-    private Long fundingCount;
+    //프로젝트 생성시 초기 값 0
+    @Range(max = Regex.SPONSOR, message = "후원자수가 맞지 않습니다.")
+    private Long fundingSponsor;
 
-    //후원액
-    @Size(max = 100000000)
+    //프로젝트 생성시 초기 값 0
+    @Range(max = Regex.AMOUNT, message = "금액이 맞지 않습니다.")
     private Long fundingAmount;
 
-    //공개 여부
-    private boolean show;
+    //프로젝트 공개 여부
+    private CommonState show;
 
-    //프로젝트 상태
     private ProjectState state;
 
-    //프로젝트 허용
-    private CommonState 허용;
+    private CommonState isDelect;
 
-    public ProjectDto(@NotNull @Size(max = 50) String title, @NotNull @Size(max = 225) String explanation, @NotNull @Size(max = 20) String originatorName, @NotNull @Email String originatorEmail, @NotNull String originatorPhone, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, @NotNull @Size(max = 100000000) Long targetAmount) {
+    //프로젝트 공개로 설정시 생성
+    public ProjectDto(@NotBlank(message = "프로젝트 이름을 작성해주세요.") @Size(max = 50) @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.") String title, @Size(max = 225) String explanation, @NotNull(message = "창작자 이름을 작성해주세요.") @Size(max = 20) @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.") String originatorName, @NotBlank(message = "메일을 작성해주세요.") @Email(message = "메일의 양식을 지켜주세요.") String originatorEmail, @NotBlank(message = "전화번호를 작성해주세요.") @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.") String originatorPhone, @NotNull(message = "프로젝트 시작 시간을 입력해주세요.") LocalDateTime startTime, @NotNull(message = "프로젝트 종료 시간을 입력해주세요.") LocalDateTime endTime, @NotNull(message = "목표액을 입력해주세요.") @Range(max = 100000000) Long targetAmount) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
@@ -76,12 +75,14 @@ public class ProjectDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.targetAmount = targetAmount;
-        this.show = true;
-        this.state = ProjectState.FAILURE;
-        this.허용 = CommonState.PERMIT;
+        this.fundingSponsor = Regex.START_PROJECT;
+        this.fundingAmount = Regex.START_PROJECT;
+        this.show = CommonState.OPEN;
+        this.isDelect = CommonState.PERMIT;
     }
 
-    public ProjectDto(@NotNull @Size(max = 50) String title, @NotNull @Size(max = 225) String explanation, @NotNull @Size(max = 20) String originatorName, @NotNull @Email String originatorEmail, @NotNull String originatorPhone, @NotNull LocalDateTime startTime, @NotNull LocalDateTime endTime, @NotNull @Size(max = 100000000) Long targetAmount, boolean show) {
+    //프로젝트 비공개로 설정시 생성
+    public ProjectDto(@NotBlank(message = "프로젝트 이름을 작성해주세요.") @Size(max = 50) @Pattern(regexp = Regex.TITLE, message = "한글, 숫자, 영문만 사용 가능합니다.") String title, @Size(max = 225) String explanation, @NotNull(message = "창작자 이름을 작성해주세요.") @Size(max = 20) @Pattern(regexp = Regex.NAME, message = "한글, 숫자, 영문, _(underbar)만 사용 가능합니다.") String originatorName, @NotBlank(message = "메일을 작성해주세요.") @Email(message = "메일의 양식을 지켜주세요.") String originatorEmail, @NotBlank(message = "전화번호를 작성해주세요.") @Pattern(regexp = Regex.PHONE, message = "번호가 잘못되었습니다.") String originatorPhone, @NotNull(message = "프로젝트 시작 시간을 입력해주세요.") LocalDateTime startTime, @NotNull(message = "프로젝트 종료 시간을 입력해주세요.") LocalDateTime endTime, @NotNull(message = "목표액을 입력해주세요.") @Range(max = 100000000) Long targetAmount, CommonState show) {
         this.title = title;
         this.explanation = explanation;
         this.originatorName = originatorName;
@@ -90,13 +91,14 @@ public class ProjectDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.targetAmount = targetAmount;
+        this.fundingSponsor = Regex.START_PROJECT;
+        this.fundingAmount = Regex.START_PROJECT;
         this.show = show;
-        this.show = true;
-        this.state = ProjectState.FAILURE;
-        this.허용 = CommonState.PERMIT;
+        this.isDelect = CommonState.PERMIT;
     }
 
-    public Project to_project() {
-        return new Project(title, explanation, originatorName, originatorEmail, originatorPhone, startTime, endTime, targetAmount, show, state, 허용);
+    public Project toProject() {
+        return new Project(title, explanation, originatorName, originatorEmail, originatorPhone,
+                startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, isDelect);
     }
 }

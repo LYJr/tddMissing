@@ -1,34 +1,34 @@
 package mission.controller;
 
 import mission.common.CommonResponse;
-import mission.common.CommonState;
 import mission.domain.Project;
-import mission.domain.ProjectRepository;
-import mission.dto.ProjectDto;
+import mission.domain.repository.ProjectRepository;
 import mission.service.ProjectService;
+import mission.template.ProjectTemplateTest;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ProjectControllerTest {
+public class ProjectControllerTest extends ProjectTemplateTest {
 
     @LocalServerPort
     private int port;
@@ -44,12 +44,6 @@ public class ProjectControllerTest {
 
     private static final Logger log = getLogger(ProjectControllerTest.class);
 
-    private LocalDateTime start = LocalDateTime.of(2019, 1,12,0,0,0);
-    private LocalDateTime end = LocalDateTime.of(2019, 2,12,1,3,8);
-    private ProjectDto projectDto =
-            new ProjectDto("제목", "설명", "이름", "email@a.a", "0000000", start, end, (long)3000);
-
-
     @After
     public void tearDown() throws Exception {
         projectRepository.deleteAll();
@@ -57,9 +51,9 @@ public class ProjectControllerTest {
 
     @Test
     public void saveTest() throws Exception {
-        String url = "http://localhost:"+port+"/create";
+        String url = "http://localhost:" + port + "/create";
 
-        ResponseEntity<CommonResponse> responseEntity= restTemplate
+        ResponseEntity<CommonResponse> responseEntity = restTemplate
                 .postForEntity(url, projectDto, CommonResponse.class);
 
         log.debug("responsEntity : {} ", responseEntity.toString());
@@ -73,37 +67,25 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void update() throws Exception {
+    public void sponsorshipTest() throws Exception {
+        String url = "http://localhost:" + port + "/sponsorship";
+        projectService.save(projectDto);
+        List<Project> find = projectService.findAll();
 
-    }
+        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
 
-    @Test
-    @Transactional
-    public void delect() throws Exception {
-        String url = "http://localhost:"+port+"/delect";
+        param.add("id", find.get(0).getId());
+        param.add("fundingAmount", 3000);
 
-        Project project = projectService.save(projectDto);
+        ResponseEntity<CommonResponse> responseEntity = restTemplate
+                .postForEntity(url, param, CommonResponse.class);
 
-        log.debug("project Save : {} ", project.getId());
-        System.out.println(project.getId());
+        log.debug("responsEntity : {} ", responseEntity.toString());
 
-        ResponseEntity<CommonResponse> responseEntity= restTemplate
-                .postForEntity(url, project.getId(), CommonResponse.class);
+//        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Project delectProject = projectService.findById(project.getId());
+        List<Project> all = projectService.findAll();
 
-        System.out.println(delectProject);
-
-        assertThat(delectProject.get허용()).isEqualTo(CommonState.DELECT);
-    }
-
-    @Test
-    public void projectListAll() throws Exception {
-
-    }
-
-    @Test
-    public void fundingUpdate () throws Exception {
-
+        System.out.println(all.get(0));
     }
 }
