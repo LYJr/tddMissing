@@ -63,7 +63,6 @@ public class ProjectController {
 
     @PutMapping("/sponsorship/{id}")
     public CommonResponse sponsorship(@PathVariable UUID id, @RequestBody Long fundingAmount) {
-        projectService.sponsorship(id, fundingAmount);
         return CommonResponse.success(projectService.sponsorship(id, fundingAmount));
     }
 }

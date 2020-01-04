@@ -1,6 +1,5 @@
 package mission.common;
 
-import mission.domain.ProjectState;
 import mission.template.ProjectTemplateTest;
 import org.junit.Test;
 
