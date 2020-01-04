@@ -2,8 +2,8 @@ package mission.domain;
 
 import lombok.*;
 import mission.common.CommonState;
-import mission.dto.ProjectDto;
-import org.hibernate.annotations.GenericGenerator;
+import mission.dto.ProjecCreateDto;
+import mission.dto.ProjectFindDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +19,7 @@ import java.util.UUID;
 public class Project {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column
@@ -88,19 +87,19 @@ public class Project {
         return CommonState.AIRTIGHT;
     }
 
-    public void update(ProjectDto projectDto) {
-        this.title = projectDto.getTitle();
-        this.explanation = projectDto.getExplanation();
-        this.originatorName = projectDto.getOriginatorName();
-        this.originatorEmail = projectDto.getOriginatorEmail();
-        this.originatorPhone = projectDto.getOriginatorPhone();
-        this.startTime = projectDto.getStartTime();
-        this.endTime = projectDto.getEndTime();
-        this.targetAmount = projectDto.getTargetAmount();
-        this.fundingSponsor = projectDto.getFundingSponsor();
-        this.fundingAmount = projectDto.getFundingAmount();
+    public void update(ProjecCreateDto projecCreateDto) {
+        this.title = projecCreateDto.getTitle();
+        this.explanation = projecCreateDto.getExplanation();
+        this.originatorName = projecCreateDto.getOriginatorName();
+        this.originatorEmail = projecCreateDto.getOriginatorEmail();
+        this.originatorPhone = projecCreateDto.getOriginatorPhone();
+        this.startTime = projecCreateDto.getStartTime();
+        this.endTime = projecCreateDto.getEndTime();
+        this.targetAmount = projecCreateDto.getTargetAmount();
+        this.fundingSponsor = projecCreateDto.getFundingSponsor();
+        this.fundingAmount = projecCreateDto.getFundingAmount();
         this.show = inputShow(show);
-        this.state = stateUpdate(projectDto.getStartTime(), projectDto.getEndTime(), projectDto.getTargetAmount(), projectDto.getFundingAmount());
+        this.state = stateUpdate(projecCreateDto.getStartTime(), projecCreateDto.getEndTime(), projecCreateDto.getTargetAmount(), projecCreateDto.getFundingAmount());
     }
 
     private ProjectState stateUpdate(LocalDateTime startTime, LocalDateTime endTime, long targetAmount, long fundingAmount) {
@@ -136,9 +135,7 @@ public class Project {
         return id;
     }
 
-    public ProjectDto toProjectDto () {
-        return new ProjectDto(
-                id, title, explanation, originatorName, originatorEmail, originatorPhone,
-                startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state);
+    public ProjectFindDto toProjectFindDto(){
+        return new ProjectFindDto(id, title, explanation, originatorName, originatorEmail, originatorPhone, startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state);
     }
 }

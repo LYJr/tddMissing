@@ -3,7 +3,8 @@ package mission.service;
 import mission.common.CommonState;
 import mission.domain.Project;
 import mission.domain.repository.ProjectRepository;
-import mission.dto.ProjectDto;
+import mission.dto.ProjecCreateDto;
+import mission.dto.ProjectFindDto;
 import mission.dto.ProjectListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,19 +29,23 @@ public class ProjectService {
         return projectRepository.availablePageProjectList(pageable, CommonState.PERMIT);
     }
 
-    public Project findByIdAndToDelete(UUID id) {
-        return projectRepository.findByIdAndToDelete(id, CommonState.PERMIT);
+    public Project findByIdAndToDelete(UUID id) throws IllegalArgumentException {
+        try{
+            return projectRepository.findByIdAndToDelete(id, CommonState.PERMIT);
+        }catch (Exception e) {
+            throw new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다." + id);
+        }
     }
 
-    public Project save(ProjectDto projectDto) {
-        return projectRepository.save(projectDto.toProject());
+    public ProjectFindDto save(ProjecCreateDto projecCreateDto) {
+        return projectRepository.save(projecCreateDto.toProject()).toProjectFindDto();
     }
 
     @Transactional
-    public Project update(UUID id, ProjectDto projectDto) throws IllegalArgumentException {
+    public ProjectFindDto update(UUID id, ProjecCreateDto projecCreateDto) {
         Project project = findByIdAndToDelete(id);
-        project.update(projectDto);
-        return project;
+        project.update(projecCreateDto);
+        return project.toProjectFindDto();
     }
 
     @Transactional
@@ -51,9 +56,9 @@ public class ProjectService {
     }
 
     @Transactional
-    public Project sponsorship(UUID id, long fundingAmount) {
+    public ProjectFindDto sponsorship(UUID id, long fundingAmount) {
         Project project = findByIdAndToDelete(id);
         project.sponsorship(fundingAmount);
-        return project;
+        return project.toProjectFindDto();
     }
 }

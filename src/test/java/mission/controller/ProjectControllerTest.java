@@ -21,7 +21,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -51,25 +50,26 @@ public class ProjectControllerTest extends ProjectTemplateTest {
 
     @Test
     public void saveTest() throws Exception {
-        String url = "http://localhost:" + port + "/project/create";
+        String url = "http://localhost:" + port + "/create";
 
         ResponseEntity<CommonResponse> responseEntity = restTemplate
-                .postForEntity(url, projectDto, CommonResponse.class);
+                .postForEntity(url, projecCreateDto, CommonResponse.class);
 
         log.debug("responsEntity : {} ", responseEntity.toString());
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         List<Project> all = projectService.findAll();
+        System.out.println(all.get(0));
 
-        assertThat(all.get(0).getTitle()).isEqualTo(projectDto.getTitle());
-        assertThat(all.get(0).getOriginatorEmail()).isEqualTo(projectDto.getOriginatorEmail());
+        assertThat(all.get(0).getTitle()).isEqualTo(projecCreateDto.getTitle());
+        assertThat(all.get(0).getOriginatorEmail()).isEqualTo(projecCreateDto.getOriginatorEmail());
     }
 
     @Test
     public void sponsorshipTest() throws Exception {
         String url = "http://localhost:" + port + "/project/sponsorship";
-        projectService.save(projectDto);
+        projectService.save(projecCreateDto);
         List<Project> find = projectService.findAll();
 
         MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
