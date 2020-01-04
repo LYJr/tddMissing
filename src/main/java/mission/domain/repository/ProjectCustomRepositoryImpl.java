@@ -34,6 +34,7 @@ public class ProjectCustomRepositoryImpl extends QuerydslRepositorySupport imple
 
         JPQLQuery<ProjectListDto> query = queryFactory
                 .select(Projections.fields(ProjectListDto.class,
+                        project.id,
                         project.title,
                         project.originatorName,
                         project.targetAmount,
@@ -43,7 +44,7 @@ public class ProjectCustomRepositoryImpl extends QuerydslRepositorySupport imple
                         project.startTime,
                         project.endTime))
                 .from(project)
-                .where(project.isDelect.eq(isDelect))
+                .where(project.toDelete.eq(isDelect))
                 .offset(pageable.getOffset())
                 .limit(Regex.PAGE_LIMIT)
                 .fetchAll();

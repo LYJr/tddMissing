@@ -22,6 +22,15 @@ public class RegexTest {
     }
 
     @Test
+    public void 제목_숫자_성공() {
+        Pattern pattern = Pattern.compile(Regex.TITLE);
+        Matcher matches = pattern.matcher("aaabadfa123");
+        System.out.println("ㅇㅁㄹㅁㅇㄹㅁ");
+
+        assertThat(matches.find()).isEqualTo(true);
+    }
+
+    @Test
     public void 제목_실패() {
         Pattern pattern = Pattern.compile(Regex.TITLE);
         Matcher matches = pattern.matcher("aaa_dfa!!");

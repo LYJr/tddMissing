@@ -4,7 +4,8 @@ import mission.common.CommonState;
 import mission.controller.ProjectControllerTest;
 import mission.domain.Project;
 import mission.domain.repository.ProjectRepository;
-import mission.dto.ProjectDto;
+import mission.dto.ProjecCreateDto;
+import mission.dto.ProjectFindDto;
 import mission.dto.ProjectListDto;
 import mission.template.ProjectTemplateTest;
 import org.junit.After;
@@ -21,7 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -45,11 +45,11 @@ public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Before
     public void 저장() {
-        List<ProjectDto> projectDtos = createDto();
+        List<ProjecCreateDto> projecCreateDtos = createDto();
 
         long i = 1000;
         long j = 0;
-        for (ProjectDto dto : projectDtos) {
+        for (ProjecCreateDto dto : projecCreateDtos) {
             dto.setFundingSponsor(j);
             dto.setFundingAmount(i);
             projectService.save(dto);
@@ -62,7 +62,7 @@ public class ProjectServiceTest extends ProjectTemplateTest {
     public void 저장_호출() {
         List<Project> projectList = projectService.findAll();
         Project project = projectList.get(0);
-        assertThat(project.getTitle()).isEqualTo(projectDto.getTitle());
+        assertThat(project.getTitle()).isEqualTo(projecCreateDto.getTitle());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ProjectServiceTest extends ProjectTemplateTest {
 
     @Test
     public void 삭제() {
-        projectService.save(projectDto);
+        projectService.save(projecCreateDto);
         List<Project> find = projectService.findAll();
         projectService.delete(find.get(0).getId());
 
@@ -98,7 +98,7 @@ public class ProjectServiceTest extends ProjectTemplateTest {
     @Test
     public void 펀딩() {
         List<Project> find = projectService.findAll();
-        Project project =projectService.sponsorship(find.get(0).getId(), 3000);
+        ProjectFindDto project =projectService.sponsorship(find.get(0).getId(), 3000);
 
        assertThat(project.getFundingAmount()).isEqualTo(4000);
     }

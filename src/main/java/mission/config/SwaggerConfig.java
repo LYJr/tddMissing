@@ -22,9 +22,6 @@ public class SwaggerConfig {
     @ConditionalOnMissingBean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-//                .alternateTypeRules(
-//                        AlternateTypeRules.newRule(typeResolver.resolve(Pageable.class)
-//                        , typeResolver.resolve(Page.class)))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/**"))
