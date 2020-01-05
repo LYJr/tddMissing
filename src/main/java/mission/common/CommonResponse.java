@@ -1,17 +1,13 @@
 package mission.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.validation.BindingResult;
 
 import java.util.UUID;
 
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class CommonResponse<T> {
     private T projectData;
     private String message;

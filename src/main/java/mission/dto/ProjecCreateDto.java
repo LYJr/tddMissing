@@ -42,11 +42,11 @@ public class ProjecCreateDto {
     private String originatorPhone;
 
     @NotNull(message = "프로젝트 시작 시간을 입력해주세요.")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime startTime;
 
     @NotNull(message = "프로젝트 종료 시간을 입력해주세요.")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime endTime;
 
     @NotNull(message = "목표액을 입력해주세요.")

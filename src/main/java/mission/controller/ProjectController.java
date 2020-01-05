@@ -5,6 +5,7 @@ import mission.dto.ProjecCreateDto;
 import mission.service.ProjectService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
+@RequestMapping("/project")
 public class ProjectController {
 
     @Autowired
@@ -51,7 +53,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projectList")
-    public CommonResponse projectList(@RequestBody Pageable pageable) {
+    public CommonResponse projectList(@PageableDefault Pageable pageable) {
         return CommonResponse.success(projectService.availableProjectList(pageable));
     }
 

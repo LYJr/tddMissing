@@ -3,6 +3,7 @@ package mission.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import mission.common.CommonState;
+import mission.common.Regex;
 import mission.domain.ProjectState;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,10 @@ public class ProjectFindDto {
     private String originatorEmail;
     private String originatorPhone;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime startTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime endTime;
 
     private Long targetAmount;
