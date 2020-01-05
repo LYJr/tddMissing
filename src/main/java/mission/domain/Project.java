@@ -12,7 +12,6 @@ import java.util.UUID;
 @Entity
 @Table
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -81,7 +80,7 @@ public class Project {
     }
 
     private CommonState inputShow(CommonState show) {
-        if(show == null){
+        if (show == null) {
             return CommonState.OPEN;
         }
         return CommonState.AIRTIGHT;
@@ -103,11 +102,11 @@ public class Project {
     }
 
     private ProjectState stateUpdate(LocalDateTime startTime, LocalDateTime endTime, long targetAmount, long fundingAmount) {
-        if(!isStartTimeCheck(startTime)) {
+        if (!isStartTimeCheck(startTime)) {
             return ProjectState.PREPARING;
         }
 
-        if(isStartTimeCheck(startTime) && isEndTimeCheck(endTime)) {
+        if (isStartTimeCheck(startTime) && isEndTimeCheck(endTime)) {
             return isSuccess(targetAmount, fundingAmount);
         }
         return ProjectState.PROCEEDING;
@@ -135,7 +134,7 @@ public class Project {
         return id;
     }
 
-    public ProjectFindDto toProjectFindDto(){
+    public ProjectFindDto toProjectFindDto() {
         return new ProjectFindDto(id, title, explanation, originatorName, originatorEmail, originatorPhone, startTime, endTime, targetAmount, fundingSponsor, fundingAmount, show, state);
     }
 }

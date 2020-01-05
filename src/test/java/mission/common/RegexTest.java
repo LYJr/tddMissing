@@ -1,9 +1,6 @@
 package mission.common;
 
 import org.junit.Test;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,7 +8,6 @@ import java.util.regex.Pattern;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class RegexTest {
-
 
     @Test
     public void 제목_성공() {
@@ -25,7 +21,6 @@ public class RegexTest {
     public void 제목_숫자_성공() {
         Pattern pattern = Pattern.compile(Regex.TITLE);
         Matcher matches = pattern.matcher("aaabadfa123");
-        System.out.println("ㅇㅁㄹㅁㅇㄹㅁ");
 
         assertThat(matches.find()).isEqualTo(true);
     }

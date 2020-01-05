@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import mission.common.Regex;
 import mission.domain.ProjectState;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -22,9 +23,9 @@ public class ProjectListDto {
     private Long fundingAmount;
     private ProjectState state;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime startTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = Regex.DATE_FORMAT)
     private LocalDateTime endTime;
 }

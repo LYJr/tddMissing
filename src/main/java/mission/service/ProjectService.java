@@ -21,7 +21,7 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public List<Project> findAll(){
+    public List<Project> findAll() {
         return projectRepository.findAll();
     }
 
@@ -30,9 +30,9 @@ public class ProjectService {
     }
 
     public Project findByIdAndToDelete(UUID id) throws IllegalArgumentException {
-        try{
+        try {
             return projectRepository.findByIdAndToDelete(id, CommonState.PERMIT);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다." + id);
         }
     }

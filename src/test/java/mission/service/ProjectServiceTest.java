@@ -1,7 +1,6 @@
 package mission.service;
 
 import mission.common.CommonState;
-import mission.controller.ProjectControllerTest;
 import mission.domain.Project;
 import mission.domain.repository.ProjectRepository;
 import mission.dto.ProjecCreateDto;
@@ -9,10 +8,8 @@ import mission.dto.ProjectFindDto;
 import mission.dto.ProjectListDto;
 import mission.template.ProjectTemplateTest;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -24,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.slf4j.LoggerFactory.getLogger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,15 +32,12 @@ public class ProjectServiceTest extends ProjectTemplateTest {
     @Autowired
     private ProjectService projectService;
 
-    private static final Logger log = getLogger(ProjectControllerTest.class);
-
     @After
     public void cleanup() {
         projectRepository.deleteAll();
     }
 
-    @Before
-    public void 저장() {
+    public void listSave() {
         List<ProjecCreateDto> projecCreateDtos = createDto();
 
         long i = 1000;
@@ -53,54 +46,60 @@ public class ProjectServiceTest extends ProjectTemplateTest {
             dto.setFundingSponsor(j);
             dto.setFundingAmount(i);
             projectService.save(dto);
-            i = i*2;
+            i = i * 2;
             j++;
         }
     }
 
+    public ProjectFindDto saveOne() {
+        return projectService.save(projecCreateDto);
+    }
+
     @Test
-    public void 저장_호출() {
+    public void save_findAll_test() {
+        ProjectFindDto projectFindDto = saveOne();
         List<Project> projectList = projectService.findAll();
         Project project = projectList.get(0);
-        assertThat(project.getTitle()).isEqualTo(projecCreateDto.getTitle());
+
+        assertThat(project.getTitle()).isEqualTo(projectFindDto.getTitle());
     }
 
     @Test
-    public void oneSelect() {
-        List<Project> all = projectService.findAll();
+    public void findOne() {
+        ProjectFindDto projectFindDto = saveOne();
+        Project project = projectService.findByIdAndToDelete(projectFindDto.getId());
 
-        Project project = projectService.findByIdAndToDelete(all.get(0).getId());
-        System.out.println(project);
+        assertThat(project.getTitle()).isEqualTo(projectFindDto.getTitle());
     }
 
+    /**
+     * Sort condition : startTime, endTime, targetAmount, fundingAmount
+     */
     @Test
-    public void pageTest() {
+    public void pageFind() {
+        listSave();
+
         String sort = "endTime";
         Pageable pageable = PageRequest.of(2, 10, Sort.Direction.DESC, sort);
-
         Page<ProjectListDto> projectList = projectService.availableProjectList(pageable);
-        for (ProjectListDto projectListDto : projectList) {
-            System.out.println(projectListDto);
-            System.out.println();
-        }
+
+        assertThat(projectList.getSize()).isEqualTo(10);
     }
 
     @Test
-    public void 삭제() {
-        projectService.save(projecCreateDto);
-        List<Project> find = projectService.findAll();
-        projectService.delete(find.get(0).getId());
+    public void deleteInput() {
+        ProjectFindDto projectFindDto = saveOne();
+        projectService.delete(projectFindDto.getId());
+        Project project = projectRepository.findById(projectFindDto.getId()).get();
 
-        Project p = projectRepository.findById(find.get(0).getId()).get();
-        assertThat(p.getToDelete()).isEqualTo(CommonState.DELECT);
+        assertThat(project.getToDelete()).isEqualTo(CommonState.DELECT);
     }
 
     @Test
-    public void 펀딩() {
-        List<Project> find = projectService.findAll();
-        ProjectFindDto project =projectService.sponsorship(find.get(0).getId(), 3000);
+    public void sponsorshipInput() {
+        ProjectFindDto projectFindDto = saveOne();
+        ProjectFindDto sponsorship = projectService.sponsorship(projectFindDto.getId(), 3000);
 
-       assertThat(project.getFundingAmount()).isEqualTo(4000);
+        assertThat(sponsorship.getFundingAmount()).isEqualTo(3000);
     }
-
 }

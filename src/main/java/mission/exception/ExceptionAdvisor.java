@@ -13,7 +13,6 @@ public class ExceptionAdvisor {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String validationError(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
-
         StringBuilder builder = new StringBuilder();
 
         return builder.toString();
